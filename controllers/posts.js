@@ -1,18 +1,21 @@
 const Post = require("../models/post");
 
 exports.createPost = (req, res, next) => {
-    console.log("create post");
+  console.log("create post");
   const post = new Post({
     title: req.body.title,
+    postCollection: req.body.postCollection,
     content: req.body.content,
     contentPreview: req.body.contentPreview,
     author: req.body.author,
-    totalLikes: req.body.totalLikes,
+    createDate: req.body.createDate,
+    totalLikes: 0,
   });
 
   post
     .save()
     .then((createdPost) => {
+      console.log("post creado: ", createdPost);
       res.status(201).json({
         message: "Post added!!",
         post: {
@@ -27,13 +30,32 @@ exports.createPost = (req, res, next) => {
     });
 };
 
+exports.getNewsPosts = (req, res, next) => {
+  getAllPostsByFilter(req, res, next, "NEWS");
+};
+
+exports.getReviewsPosts = (req, res, next) => {
+  getAllPostsByFilter(req, res, next, "REVIEWS");
+};
+
+exports.getIndiePosts = (req, res, next) => {
+  getAllPostsByFilter(req, res, next, "INDIE");
+};
+
 exports.getPosts = (req, res, next) => {
-    console.log("get post");
+  getAllPostsByFilter(req, res, next);
+};
+
+function getAllPostsByFilter(req, res, next, filter) {
+  console.log("get all posts by filter");
 
   const pageSize = req.query.pageSize;
   const currentPage = req.query.page;
+  console.log(req);
 
-  const postQuery = Post.find();
+  var postQuery;
+  if (filter === undefined) postQuery = Post.find();
+  else postQuery = Post.find().where("postCollection").equals(filter);
   let fetchedPosts;
 
   if (pageSize && currentPage) {
@@ -43,6 +65,7 @@ exports.getPosts = (req, res, next) => {
   postQuery
     .then((documents) => {
       fetchedPosts = documents;
+      console.log(fetchedPosts);
       return Post.count();
     })
     .then((count) => {
@@ -57,4 +80,4 @@ exports.getPosts = (req, res, next) => {
         message: "Fetching posts Failed!!",
       });
     });
-};
+}
