@@ -1,8 +1,9 @@
 const express = require("express");
 const PostController = require("../controllers/posts")
 const router = express.Router();
+const fileUpload = require('../middleware/file')
 
-router.post("", PostController.createPost);
+router.post("", fileUpload, PostController.createPost);
 router.get("", PostController.getPosts);
 router.get("/news", PostController.getNewsPosts);
 router.get("/reviews", PostController.getReviewsPosts);

@@ -2,6 +2,9 @@ const Post = require("../models/post");
 
 exports.createPost = (req, res, next) => {
   console.log("create post");
+  
+  const url = req.protocol + "://" + req.get("host");
+  
   const post = new Post({
     title: req.body.title,
     postCollection: req.body.postCollection,
@@ -10,6 +13,7 @@ exports.createPost = (req, res, next) => {
     author: req.body.author,
     createDate: req.body.createDate,
     totalLikes: 0,
+    imageUrl: url + '/img/' + req.file.filename
   });
 
   post

@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema({
   createDate: { type: Date, required: true },
   // dateUpdated
   totalLikes: { type: Number, required: true },
-  //   thumbnail: { type: String, required: true },
+  imageUrl: { type: String, required: true },
   //   hidden: { type: Boolean, required: false },
   // creator,
 });
