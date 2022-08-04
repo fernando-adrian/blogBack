@@ -8,5 +8,6 @@ router.get("", PostController.getPosts);
 router.get("/news", PostController.getNewsPosts);
 router.get("/reviews", PostController.getReviewsPosts);
 router.get("/indie", PostController.getIndiePosts);
+router.get("/:uid", PostController.getOnePost);
 
 module.exports = router;

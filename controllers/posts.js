@@ -2,9 +2,9 @@ const Post = require("../models/post");
 
 exports.createPost = (req, res, next) => {
   console.log("create post");
-  
+
   const url = req.protocol + "://" + req.get("host");
-  
+
   const post = new Post({
     title: req.body.title,
     postCollection: req.body.postCollection,
@@ -13,7 +13,8 @@ exports.createPost = (req, res, next) => {
     author: req.body.author,
     createDate: req.body.createDate,
     totalLikes: 0,
-    imageUrl: url + '/img/' + req.file.filename
+    imageUrl: url + "/img/" + req.file.filename,
+    postUrl: req.body.postUrl,
   });
 
   post
@@ -49,6 +50,33 @@ exports.getIndiePosts = (req, res, next) => {
 exports.getPosts = (req, res, next) => {
   getAllPostsByFilter(req, res, next);
 };
+
+exports.getOnePost = (req, res, next) => {
+  getOnePost(req, res, next);
+};
+
+function getOnePost(req, res, next) {
+  console.log("get ONE post!!");
+
+  var postQuery;
+  postQuery = Post.find().where("postUrl").equals(req.params.uid);
+  let fetchedPost;
+
+  postQuery
+    .then((post) => {
+      console.log("post: " + post);
+      res.status(200).json({
+        message: "Posts fetched successfully!!",
+        post: post,
+        maxPosts: 1,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Fetching posts Failed!!",
+      });
+    });
+}
 
 function getAllPostsByFilter(req, res, next, filter) {
   console.log("get all posts by filter");

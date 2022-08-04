@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const postSchema = mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, unique: true, required: true },
   postCollection: { type: String, required: true },
   content: { type: String, required: true },
   contentPreview: { type: String, required: true },
@@ -10,6 +10,7 @@ const postSchema = mongoose.Schema({
   // dateUpdated
   totalLikes: { type: Number, required: true },
   imageUrl: { type: String, required: true },
+  postUrl: { type: String, require: true },
   //   hidden: { type: Boolean, required: false },
   // creator,
 });
